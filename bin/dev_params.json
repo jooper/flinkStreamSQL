@@ -1,0 +1,7 @@
+{
+  "sql": "E:\\Projects\\flinkStreamSQL\\Metrics\\operation_metric.sql",
+  "name": "metric",
+  "localSqlPluginPath": "E:\\Projects\\flinkStreamSQL\\sqlplugins",
+  "mode": "local"
+}
+

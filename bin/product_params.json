@@ -1,0 +1,9 @@
+{
+    "sql": "E:\\Source\\flinkStreamSQL\\launcher\\job\\sideSql2.sql",
+    "name": "tokafka_from_parajson",
+    "localSqlPluginPath": "E:\\Source\\flinkStreamSQL\\sqlplugins",
+    "mode": "local",
+    "flinkconf": "/home/flink/flink-1.10.2/conf",
+    "remoteSqlPluginPath": "/home/flink/sqlplugins"
+}
+
