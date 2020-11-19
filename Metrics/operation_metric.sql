@@ -37,7 +37,8 @@ insert into metric
 select
 '1' as pk,
 'operation_count'as metric,
-''as dt,
+DATE_FORMAT(PROCTIME,'yyyy-mm-dd') as dt,
 '手术例数'as k,
 count(DISTINCT ID) as v
-FROM mrm_first_page_operation;
+FROM mrm_first_page_operation
+group by DATE_FORMAT(PROCTIME,'yyyy-mm-dd');
