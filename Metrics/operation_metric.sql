@@ -1,9 +1,10 @@
  CREATE TABLE metric (
-    pk VARCHAR,
-    metric VARCHAR,
-    dt VARCHAR,
-    k VARCHAR,
-    v DECIMAL
+    PRO_NAME VARCHAR,
+    CODE VARCHAR,
+    LABEL VARCHAR,
+    DATA DECIMAL,
+    DT VARCHAR,
+    REMARK VARCHAR
 ) WITH (
     type='kafka10',
     bootstrapServers='master:9092,slave2:9092,slave3:9092',
@@ -35,10 +36,11 @@
 --手术人数
 insert into metric
 select
-'1' as pk,
-'operation_count'as metric,
-DATE_FORMAT(PROCTIME,'yyyy-mm-dd') as dt,
-'手术例数'as k,
-count(DISTINCT ID) as v
+'1' as PRO_NAME,
+'operation_count'as CODE,
+'手术例数'as LABEL,
+count(DISTINCT ID) as DATA,
+DATE_FORMAT(PROCTIME,'yyyy-mm-dd') as DT,
+'' REMARK
 FROM mrm_first_page_operation
 group by DATE_FORMAT(PROCTIME,'yyyy-mm-dd');
