@@ -37,7 +37,7 @@ insert into metric
 select
 '1' as pk,
 'operation_count'as metric,
-'2020-01-01 00:00:00'as dt,
-'手术人数'as k,
+''as dt,
+'手术例数'as k,
 count(DISTINCT ID) as v
 FROM mrm_first_page_operation;

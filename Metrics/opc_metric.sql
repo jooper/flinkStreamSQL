@@ -83,9 +83,9 @@ CREATE TABLE opc_drug_presc_d_charge(
 insert into metric
 select
 '2' as pk,
-'opc_patient_count'as metric,
-'2020-01-01 00:00:00'as dt,
-'今日门诊就诊人次'as k,
+'opc_diag_count'as metric,
+''as dt,
+'门诊人次'as k,
 COUNT(DISTINCT PERSON_INFO_ID) as v
 from opc_registration;
 
@@ -95,8 +95,8 @@ insert into metric
 select
 '1' as pk,
 'opc_fee'as metric,
-'2020-01-01 00:00:00'as dt,
-'今日门诊收入(万元)'as k,
+''as dt,
+'门诊收入'as k,
 sum(total_cost) as v from
 (select DISCOUNT_AFTER_AMT as total_cost from opr_registration_d
 union all
