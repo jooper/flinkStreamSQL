@@ -151,6 +151,11 @@ public class ExecuteProcessHelper {
         StreamTableEnvironment tableEnv = getStreamTableEnv(env, paramsInfo.getConfProp());
 
 
+        //开启没1秒输出一次配置
+//        tableEnv.getConfig().getConfiguration().setBoolean("table.exec.emit.early-fire.enabled", true);
+//        tableEnv.getConfig().getConfiguration().setString("table.exec.emit.early-fire.delay", "1000 ms");
+
+
         SqlParser.setLocalSqlPluginRoot(paramsInfo.getLocalSqlPluginPath());
         SqlTree sqlTree = SqlParser.parseSql(paramsInfo.getSql(), paramsInfo.getPluginLoadMode());
 

@@ -1,9 +1,8 @@
 package com.dtstack.flink.sql.launcher
 
-import org.apache.flink.api.scala.ExecutionEnvironment
-import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
-import org.apache.flink.table.api.{EnvironmentSettings, TableEnvironment}
-import org.apache.flink.table.api.scala.{BatchTableEnvironment, StreamTableEnvironment}
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
+import org.apache.flink.table.api.EnvironmentSettings
+import org.apache.flink.table.api.java.StreamTableEnvironment
 
 
 object kafka_upsert_sink {
