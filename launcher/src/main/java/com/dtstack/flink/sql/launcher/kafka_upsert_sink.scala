@@ -1,8 +1,8 @@
 package com.dtstack.flink.sql.launcher
 
-import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
-import org.apache.flink.table.api.EnvironmentSettings
-import org.apache.flink.table.api.java.StreamTableEnvironment
+import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
+import org.apache.flink.table.api.{EnvironmentSettings, Table}
+import org.apache.flink.table.api.scala.StreamTableEnvironment
 
 
 object kafka_upsert_sink {
@@ -10,125 +10,102 @@ object kafka_upsert_sink {
   def main(args: Array[String]): Unit = {
 
 
-//    val batchEnv: ExecutionEnvironment = ExecutionEnvironment.getExecutionEnvironment
-//    val bTb: BatchTableEnvironment = BatchTableEnvironment.create(batchEnv)
-//
-//    val tEnv = TableEnvironment.create(EnvironmentSettings
-//      .newInstance()
-//      .useBlinkPlanner()
-//      .inBatchMode()
-//      .build())
-
-
     val senv: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
     val blinkStreamSettings: EnvironmentSettings = EnvironmentSettings
       .newInstance
       .useBlinkPlanner
       .inStreamingMode.build
-
+    //
     val blinkStreamTableEnv = StreamTableEnvironment.create(senv, blinkStreamSettings)
 
 
     val source =
       """
-        |CREATE TABLE opc_registration (
-        |  DEPARTMENT_ID VARCHAR
+        |CREATE TABLE mrm_first_page_operation (
+        |    ID STRING,
+        |    OPERATION_DATE TIMESTAMP ,
+        |    OPERATION_NAME STRING
         |) WITH (
-        |    'connector.type' = 'kafka',
-        |    'connector.version' = 'universal',
-        |    'connector.topic' = 'opc_registration',
-        |    'connector.startup-mode' = 'latest-offset',
-        |    'connector.properties.0.key' = 'zookeeper.connect',
-        |    'connector.properties.0.value' = 'slave1:2181',
-        |    'connector.properties.1.key' = 'bootstrap.servers',
-        |    'connector.properties.1.value' = 'slave2:9092',
-        |    'format.type' = 'json',
-        |    'format.derive-schema' = 'true'
+        |'connector' = 'kafka',
+        |'properties.bootstrap.servers' = 'master:9092,slave2:9092,slave3:9092',
+        |'scan.startup.mode' = 'earliest-offset',
+        |'topic' = 'mrm_first_page_operation'
         |)
       """.stripMargin
 
-
-    //    'connector.properties.0.key' = 'zookeeper.connect',
-    //    'connector.properties.0.value' = 'slave1:2181',
-    //    'connector.properties.1.key' = 'bootstrap.servers',
-    //    'connector.properties.1.value' = 'slave2:9092',
-
-    //    'connector.properties.group.id'='test',
-    //    'connector.properties.bootstrap.servers' = 'slave2:9092',
-    //    'connector.properties.zookeeper.connect' ='slave1:2181',
 
     val sink =
       """
-        |create table user_behavior_sink
-        |(
-        |department_id string
-        |) WITH(
-        |'connector.type' = 'upsertKafka',
-        |'connector.version' = 'universal',
-        |'connector.topic' = 'user_behavior_sink',
-        |'connector.properties.0.key' = 'zookeeper.connect',
-        |'connector.properties.0.value' = 'slave1:2181',
-        |'connector.properties.1.key' = 'bootstrap.servers',
-        |'connector.properties.1.value' = 'slave2:9092',
-        |'connector.startup-mode' = 'latest-offset',
-        |'format.type' = 'json',
-        |'format.derive-schema' = 'true'
-        |)
-      """.stripMargin
-
-
-    //    ,'connector.url' = 'jdbc:oracle:thin:@10.158.5.84:1521:dbm'
-    val dim =
-      """
-        |CREATE TABLE hra00_department(
-        |    ID VARCHAR,
-        |    DEPARTMENT_CHINESE_NAME VARCHAR
-        | )WITH(
-        |    'connector.type' = 'jdbc'
-        |    ,'connector.url' = 'jdbc:oracle:thin:@10.158.5.84:1521:dbm'
-        |    ,'connector.table' = 'HRA00_DEPARTMENT'
-        |    ,'connector.username' = 'ogg'
-        |    ,'connector.password' = 'ogg'
-        |    ,'connector.write.flush.max-rows' = '1'
-        | )
-      """.stripMargin
-
-
-    val dim_mysql =
-      """
-        |CREATE TABLE customers (
-        |    customerid VARCHAR,  -- 省份id
-        |    city  VARCHAR, -- 省份名称
-        |	region_name VARCHAR -- 区域名称
+        |CREATE TABLE user_behavior_sink (
+        |    ID STRING
         |) WITH (
-        |    'connector.type' = 'jdbc',
-        |    'connector.url' = 'jdbc:mysql://master/joo',
-        |    'connector.table' = 'customers',
-        |    'connector.driver' = 'com.mysql.jdbc.Driver',
-        |    'connector.username' = 'root',
-        |    'connector.password' = '123456',
-        |    'connector.lookup.cache.max-rows' = '5000',
-        |    'connector.lookup.cache.ttl' = '10min'
+        |'connector' = 'kafka09',
+        |'properties.bootstrap.servers' = 'master:9092,slave2:9092,slave3:9092',
+        |'scan.startup.mode' = 'earliest-offset',
+        |'topic' = 'user_behavior_sink',
+        |'updateMode'='append',
+        |'format' = 'json'
         |)
       """.stripMargin
 
-    var sql = "insert into user_behavior_sink select DEPARTMENT_ID from opc_registration"
+
+    var dim =
+      """
+        |CREATE TABLE fee (
+        |  ID STRING,
+        |  ACCOUNT DOUBLE,
+        |  proc_time AS PROCTIME() --使用维表时需要指定该字段
+        |) WITH (
+        |'connector' = 'jdbc',
+        |'driver' = 'com.mysql.jdbc.Driver',
+        |'username' = 'root',
+        |'password' = '123456',
+        |'table-name' = 'fee',
+        |'url' = 'jdbc:mysql://10.158.5.83:3306/joo'
+        |)
+      """.stripMargin
+     dim =
+      """
+        |CREATE TABLE FE (
+        |  ID STRING,
+        |  ACCOUNT DOUBLE,
+        |  proc_time AS PROCTIME()
+        |) WITH (
+        |'connector' = 'jdbc',
+        |'driver' = 'com.mysql.jdbc.Driver',
+        |'username' = 'root',
+        |'password' = '123456',
+        |'table-name' = 'fee',
+        |'url' = 'jdbc:mysql://10.158.5.83:3306/joo'
+        |)
+      """.stripMargin
 
 
-    sql =
+
+
+
+    val sql =
       """
         |insert into user_behavior_sink
-        |select distinct dep.DEPARTMENT_CHINESE_NAME from opc_registration opc
-        |left join hra00_department dep on opc.DEPARTMENT_ID=dep.ID
-        |where dep.DEPARTMENT_CHINESE_NAME is not null
+        |select f.ACCOUNT from mrm_first_page_operation op
+        |left join fee f on op.ID = f.ID
       """.stripMargin
 
 
-//    blinkStreamTableEnv.executeSql(source)
-//    blinkStreamTableEnv.executeSql(sink)
-//    blinkStreamTableEnv.executeSql(dim)
-//    blinkStreamTableEnv.executeSql(sql)
-//    blinkStreamTableEnv.execute("kafka sink upsert")
+    blinkStreamTableEnv.sqlUpdate(dim)
+//    blinkStreamTableEnv.sqlUpdate(source)
+//    blinkStreamTableEnv.sqlUpdate(sink)
+//    blinkStreamTableEnv.sqlUpdate(sql)
+
+
+    val table: Table = blinkStreamTableEnv.sqlQuery("select * from FE")
+
+    println(table)
+
+
+    blinkStreamTableEnv.execute("kafka sink upsert")
+
+    //    senv.execute("")
 
   }
 }

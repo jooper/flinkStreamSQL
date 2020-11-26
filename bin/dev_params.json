@@ -1,5 +1,5 @@
 {
-  "sql": "E:\\Projects\\flinkStreamSQL\\Metrics\\operation_metric.sql",
+  "sql": "E:\\Projects\\flinkStreamSQL\\Metrics\\mysqlSink.sql",
   "name": "metric",
   "localSqlPluginPath": "E:\\Projects\\flinkStreamSQL\\sqlplugins",
   "mode": "local"

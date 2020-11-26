@@ -17,7 +17,6 @@
         <module>kafka</module>
         <module>mysql</module>
         <module>hbase</module>
-<!--        <module>elasticsearch5</module>-->
         <module>elasticsearch6</module>
         <module>mongo</module>
         <module>redis5</module>
@@ -37,6 +36,7 @@
         <module>oceanbase</module>
         <module>tidb</module>
         <module>kingbase</module>
+        <!--        <module>elasticsearch5</module>-->
         <!--        <module>localTest</module>-->
 
     </modules>

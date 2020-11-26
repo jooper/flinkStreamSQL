@@ -45,7 +45,10 @@ CREATE TABLE hra00_department(
 -- SELECT opc.LINKMAN_ADDRESS,dep.DEPARTMENT_CHINESE_NAME from opc_registration opc
 -- left join hra00_department dep  on opc.DEPARTMENT_ID=dep.ID;
 
+
+
+
+
 insert into resultss
-select DEPARTMENT_CHINESE_NAME,DEPARTMENT_CHINESE_NAME
-from  hra00_department opc
-left join opc_registration dep on 1=1;
+SELECT opc.LINKMAN_ADDRESS,dep.DEPARTMENT_CHINESE_NAME from opc_registration opc
+left join hra00_department dep  on opc.DEPARTMENT_ID=dep.ID
