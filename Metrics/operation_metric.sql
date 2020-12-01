@@ -1,36 +1,3 @@
- CREATE TABLE metric (
-    PRO_NAME VARCHAR,
-    CODE VARCHAR,
-    LABEL VARCHAR,
-    DATA DECIMAL,
-    DT VARCHAR ,
-    REMARK VARCHAR
-) WITH (
-    type='kafka10',
-    bootstrapServers='master:9092,slave2:9092,slave3:9092',
-    topic='metric',
-    timezone='Asia/Shanghai',
-    topicIsPattern ='false',
-    updateMode='upsert',
-    parallelism ='1'
-);
-
-CREATE TABLE metric_source (
-    PRO_NAME VARCHAR,
-    CODE VARCHAR,
-    LABEL VARCHAR,
-    DATA DECIMAL,
-    DT VARCHAR ,
-    REMARK VARCHAR
-) WITH (
-    type='kafka10',
-    bootstrapServers='master:9092,slave2:9092,slave3:9092',
-    topic='metric',
-    timezone='Asia/Shanghai',
-    topicIsPattern ='false',
-    parallelism ='1'
-);
-
 CREATE TABLE mrm_first_page_operation (
     ID VARCHAR,
     OPERATION_DATE TIMESTAMP,
@@ -48,15 +15,32 @@ CREATE TABLE mrm_first_page_operation (
 
 
 
+ CREATE TABLE metric_sink_kfk (
+    PRO_NAME VARCHAR,
+    CODE VARCHAR,
+    LABEL VARCHAR,
+    DATA VARCHAR,
+    DT VARCHAR ,
+    REMARK VARCHAR
+) WITH (
+    type='kafka10',
+    bootstrapServers='master:9092,slave2:9092,slave3:9092',
+    topic='hospital_metric',
+    timezone='Asia/Shanghai',
+    topicIsPattern ='false',
+    updateMode='upsert',
+    parallelism ='1'
+);
+
 
 
 --手术人数
-insert into metric
+insert into metric_sink_kfk
 select
 '1' as PRO_NAME,
 'operation_count'as CODE,
 '手术例数'as LABEL,
-count(DISTINCT ID) as DATA,
+cast(count(DISTINCT ID) as string) as DATA,
 DATE_FORMAT(PROCTIME,'yyyy-mm-dd') as DT,
 '' REMARK
 FROM mrm_first_page_operation

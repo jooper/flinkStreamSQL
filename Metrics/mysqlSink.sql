@@ -25,7 +25,7 @@ CREATE TABLE metric_sink_mysql (
     REMARK VARCHAR
 ) WITH (
      type='mysql',
-     url='jdbc:mysql://master:3306/joo?characterEncoding=utf-8',
+     url='jdbc:mysql://master:3306/joo?characterEncoding=utf-8&useSSL=false',
      userName='hive',
      password='123456',
      tableName='metric',
@@ -47,7 +47,7 @@ CREATE TABLE metric_sink_mysql (
 ) WITH (
     type='kafka10',
     bootstrapServers='master:9092,slave2:9092,slave3:9092',
-    topic='metric',
+    topic='hospital_metric',
     timezone='Asia/Shanghai',
     topicIsPattern ='false',
     updateMode='upsert',
@@ -66,7 +66,7 @@ CREATE TABLE metric_side_from_mysql(
     PERIOD FOR SYSTEM_TIME
  )WITH(
     type ='mysql',
-    url ='jdbc:mysql://master:3306/joo?characterEncoding=utf-8',
+    url ='jdbc:mysql://master:3306/joo?characterEncoding=utf-8&useSSL=false',
     userName ='hive',
     password ='123456',
     tableName ='metric',
@@ -89,7 +89,7 @@ CREATE TABLE metric_side_income(
     PERIOD FOR SYSTEM_TIME
  )WITH(
     type ='mysql',
-    url ='jdbc:mysql://master:3306/joo?characterEncoding=utf-8',
+    url ='jdbc:mysql://master:3306/joo?characterEncoding=utf-8&useSSL=false',
     userName ='hive',
     password ='123456',
     tableName ='income',
@@ -136,11 +136,12 @@ CREATE TABLE metric_side_income(
 insert into metric_sink_kfk
 select
  op.OPERATION_NAME as PRO_NAME,
-'t' as CODE,
+'opc_p_cnt' as CODE,
 '门诊人次' as LABEL,
-dim.valu as DATA,
+cast(count(distinct OPERATION_NAME) as STRING) as DATA,
 cast(op.OPERATION_DATE as STRING) as DT,
-'' AS REMARK
+dim.valu AS REMARK -- 同比值
 from mrm_first_page_operation op
 left join metric_side_income dim on op.ID=dim.id
 where op.OPERATION_NAME is not null
+group by op.OPERATION_NAME,op.OPERATION_DATE,dim.valu
