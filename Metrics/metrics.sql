@@ -148,7 +148,7 @@ CREATE TABLE ipc_diag_service_d (
  )WITH(
     type='kafka10',
     bootstrapServers='master:9092,slave2:9092,slave3:9092',
-    offsetReset ='earliest',k
+    offsetReset ='earliest',
     topic ='ipi_registration',
     timezone='Asia/Shanghai',
     topicIsPattern ='false',
@@ -173,98 +173,82 @@ CREATE TABLE ipc_diag_service_d (
 
 
 ---------------------------------------------------------------------------------------
---
--- --门诊收入
--- insert into metric_sink_kfk
--- select
--- 'opc_ipc' as PRO_NAME,
--- 'opc_fee'as CODE,
--- ''as DT,
--- '门诊收入'as LABEL,
--- cast(sum(total_cost) as string) as DATA,
--- '10' as REMARK from
--- (select DISCOUNT_AFTER_AMT as total_cost from opr_registration_d
--- union all
--- select TOTAL_AMT as total_cost from opc_diag_service_d_charge
--- union all
--- select TOTAL_AMT as total_cost from opc_drug_presc_d_charge
--- );
---
---
--- -- 门诊人次
--- insert into metric_sink_kfk
--- select
--- 'opc_ipc' as PRO_NAME,
--- 'opc_diag_count'as CODE,
--- ''as DT,
--- '门诊人次'as LABEL,
--- cast(COUNT(DISTINCT PERSON_INFO_ID)as string) as DATA,
--- '6' as REMARK
--- from opc_registration;
---
---
---
---
--- --手术人数
--- insert into metric_sink_kfk
--- select
--- 'opc_ipc' as PRO_NAME,
--- 'operation_count'as CODE,
--- '手术例数'as LABEL,
--- cast(count(DISTINCT ID) as string) as DATA,
--- DATE_FORMAT(PROCTIME,'yyyy-mm-dd') as DT,
--- '20' REMARK
--- FROM mrm_first_page_operation
--- group by DATE_FORMAT(PROCTIME,'yyyy-mm-dd');
---
---
---
---
---
--- --住院收入
--- insert into metric_sink_kfk
--- select
--- 'opc_ipc' as PRO_NAME,
--- 'ipi_fee'as CODE,
--- '住院收入'as LABEL,
--- cast(sum(t.cnt) as string) as DATA,
--- t.dt as DT,
--- '5' REMARK
--- from
--- (
--- select sum(TOTAL_AMT)cnt, DATE_FORMAT(PROCTIME,'yyyy-mm-dd') dt from ipc_drug_presc_d
--- group by DATE_FORMAT(PROCTIME,'yyyy-mm-dd')
--- union all
--- select sum(TOTAL_AMT)cnt, DATE_FORMAT(PROCTIME,'yyyy-mm-dd') dt from ipc_diag_service_d
--- group by DATE_FORMAT(PROCTIME,'yyyy-mm-dd')
--- )t
--- group by dt;
---
---
---
--- -- 住院人次
--- insert into metric_sink_kfk
--- select
--- 'opc_ipc' as PRO_NAME,
--- 'ipi_count'as CODE,
--- ''as DT,
--- '住院人次'as LABEL,
--- cast(COUNT(DISTINCT PERSON_INFO_ID)as string) as DATA,
--- '6' as REMARK
--- from ipi_registration;
 
-
-
-
--- 会诊
+--门诊收入
 insert into metric_sink_kfk
 select
-'hz' as PRO_NAME,
-'hz_count'as CODE,
-concat_ws(':',cast(HOUR(REQ_DATE) as string),'00') as DT,
-'会诊'as LABEL,
-cast(COUNT(DISTINCT ID)as string) as DATA,
-'6' as REMARK
-from (select * from ipd_consult_apply order by HOUR(REQ_DATE))
-group by concat_ws(':',cast(HOUR(REQ_DATE) as string),'00');
+'opc_ipc' as PRO_NAME,
+'opc_fee'as CODE,
+''as DT,
+'门诊收入'as LABEL,
+cast(sum(total_cost) as string) as DATA,
+'10' as REMARK from
+(select DISCOUNT_AFTER_AMT as total_cost from opr_registration_d
+union all
+select TOTAL_AMT as total_cost from opc_diag_service_d_charge
+union all
+select TOTAL_AMT as total_cost from opc_drug_presc_d_charge
+);
 
+
+
+
+-- 门诊人次
+insert into metric_sink_kfk
+select
+'opc_ipc' as PRO_NAME,
+'opc_diag_count'as CODE,
+''as DT,
+'门诊人次'as LABEL,
+cast(COUNT(DISTINCT PERSON_INFO_ID)as string) as DATA,
+'6' as REMARK
+from opc_registration;
+
+
+
+
+--手术人数
+insert into metric_sink_kfk
+select
+'opc_ipc' as PRO_NAME,
+'operation_count'as CODE,
+'手术例数'as LABEL,
+cast(count(DISTINCT ID) as string) as DATA,
+DATE_FORMAT(PROCTIME,'yyyy-mm-dd') as DT,
+'20' REMARK
+FROM mrm_first_page_operation
+group by DATE_FORMAT(PROCTIME,'yyyy-mm-dd');
+
+
+
+--住院收入
+insert into metric_sink_kfk
+select
+'opc_ipc' as PRO_NAME,
+'ipi_fee'as CODE,
+'住院收入'as LABEL,
+cast(sum(t.cnt) as string) as DATA,
+t.dt as DT,
+'5' REMARK
+from
+(
+select sum(TOTAL_AMT)cnt, DATE_FORMAT(PROCTIME,'yyyy-mm-dd') dt from ipc_drug_presc_d
+group by DATE_FORMAT(PROCTIME,'yyyy-mm-dd')
+union all
+select sum(TOTAL_AMT)cnt, DATE_FORMAT(PROCTIME,'yyyy-mm-dd') dt from ipc_diag_service_d
+group by DATE_FORMAT(PROCTIME,'yyyy-mm-dd')
+)t
+group by dt;
+
+
+
+-- 住院人次
+insert into metric_sink_kfk
+select
+'opc_ipc' as PRO_NAME,
+'ipi_count'as CODE,
+''as DT,
+'住院人次'as LABEL,
+cast(COUNT(DISTINCT PERSON_INFO_ID)as string) as DATA,
+'6' as REMARK
+from ipi_registration;
