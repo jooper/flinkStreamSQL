@@ -173,6 +173,9 @@ public class DtNestRowDeserializationSchema extends AbstractDeserializationSchem
      * 将 2020-09-07 14:49:10.0 和 1598446699685 两种格式都转化为 Timestamp
      */
     private Timestamp convertToTimestamp(String timestamp) {
+        if (timestamp == null || timestamp.toLowerCase().equals("null")) {
+            return new Timestamp(0);
+        }
         if (TIMESTAMP_PATTERN.matcher(timestamp).find()) {
             return new Timestamp(Long.parseLong(timestamp));
         }

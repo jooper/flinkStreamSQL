@@ -20,7 +20,6 @@
 package com.dtstack.flink.sql;
 
 
-
 import com.dtstack.flink.sql.exec.ExecuteProcessHelper;
 import com.dtstack.flink.sql.exec.ParamsInfo;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -30,6 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Date: 2018/6/26
  * Company: www.dtstack.com
+ *
  * @author xuchao
  */
 

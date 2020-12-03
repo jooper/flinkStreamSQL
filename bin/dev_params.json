@@ -1,8 +1,0 @@
-{
-  "sql": "E:\\clyang\\project\\flink\\flinkStreamSQL_1\\flinkStreamSQL\\Metrics\\ipc_items.sql",
-  "name": "metric_test",
-  "localSqlPluginPath": "E:\\clyang\\project\\flink\\flinkStreamSQL_1\\flinkStreamSQL\\sqlplugins",
-  "mode": "local",
-  "confProp": "{\"time.characteristic\":\"eventTime\",\"logLevel\":\"info\"}"
-}
-

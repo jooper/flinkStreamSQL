@@ -17,7 +17,6 @@
         <module>kafka</module>
         <module>mysql</module>
         <module>hbase</module>
-<!--        <module>elasticsearch5</module>-->
         <module>elasticsearch6</module>
         <module>mongo</module>
         <module>redis5</module>
@@ -37,6 +36,7 @@
         <module>oceanbase</module>
         <module>tidb</module>
         <module>kingbase</module>
+        <!--        <module>elasticsearch5</module>-->
         <!--        <module>localTest</module>-->
 
     </modules>
@@ -89,6 +89,13 @@
             <classifier>runtime</classifier>
             <scope>test</scope>
             <version>${jacoco.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-runtime-web_2.12</artifactId>
+            <version>1.10.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

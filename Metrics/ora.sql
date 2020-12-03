@@ -12,28 +12,6 @@ LINKMAN_ADDRESS VARCHAR(100)
     parallelism ='1'
  );
 
-CREATE TABLE RESULT_FIELD20(
-    LINKMAN_ADDRESS VARCHAR,
-    DEPARTMENT_CHINESE_NAME VARCHAR
- )WITH(
-    type='console'
- );
-
-
-
- CREATE TABLE resultss(
-    LINKMAN_ADDRESS VARCHAR,
-    DEPARTMENT_CHINESE_NAME VARCHAR
- )WITH(
-    type='kafka10',
-    bootstrapServers='slave2:9092',
-    topic='oracle_side_kafka',
-    timezone='Asia/Shanghai',
-    topicIsPattern ='false',
-    updateMode='upsert',
-    parallelism ='1'
- );
-
 CREATE TABLE hra00_department(
     ID VARCHAR(20),
     DEPARTMENT_CHINESE_NAME VARCHAR(100),
@@ -50,7 +28,27 @@ CREATE TABLE hra00_department(
     asyncPoolSize ='3'
  );
 
+ CREATE TABLE resultss(
+    LINKMAN_ADDRESS VARCHAR,
+    DEPARTMENT_CHINESE_NAME VARCHAR
+ )WITH(
+    type='kafka10',
+    bootstrapServers='slave2:9092',
+    topic='oracle_side_kafka',
+    timezone='Asia/Shanghai',
+    topicIsPattern ='false',
+    updateMode='upsert',
+    parallelism ='1'
+ );
+
+-- insert into resultss
+-- SELECT opc.LINKMAN_ADDRESS,dep.DEPARTMENT_CHINESE_NAME from opc_registration opc
+-- left join hra00_department dep  on opc.DEPARTMENT_ID=dep.ID;
+
+
+
+
 
 insert into resultss
 SELECT opc.LINKMAN_ADDRESS,dep.DEPARTMENT_CHINESE_NAME from opc_registration opc
-left join hra00_department dep  on opc.DEPARTMENT_ID=dep.ID;
+left join hra00_department dep  on opc.DEPARTMENT_ID=dep.ID
