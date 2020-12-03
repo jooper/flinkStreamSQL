@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+sh -x submit.sh -mode local -sql /home/flink/jobs/${1}.sql  -name $2  -localSqlPluginPath /home/flink/sqlplugins   -mode standalone -flinkconf /home/flink/flink-1.10.2/conf  -remoteSqlPluginPath /home/flink/sqlplugins
