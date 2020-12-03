@@ -148,7 +148,7 @@ CREATE TABLE ipc_diag_service_d (
  )WITH(
     type='kafka10',
     bootstrapServers='master:9092,slave2:9092,slave3:9092',
-    offsetReset ='earliest',
+    offsetReset ='earliest',k
     topic ='ipi_registration',
     timezone='Asia/Shanghai',
     topicIsPattern ='false',
@@ -265,6 +265,6 @@ concat_ws(':',cast(HOUR(REQ_DATE) as string),'00') as DT,
 '会诊'as LABEL,
 cast(COUNT(DISTINCT ID)as string) as DATA,
 '6' as REMARK
-from ipd_consult_apply
+from (select * from ipd_consult_apply order by HOUR(REQ_DATE))
 group by concat_ws(':',cast(HOUR(REQ_DATE) as string),'00');
 

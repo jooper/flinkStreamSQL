@@ -1,5 +1,5 @@
 {
-  "sql": "E:\\Projects\\flinkStreamSQL\\Metrics\\metrics.sql",
+  "sql": "E:\\Projects\\flinkStreamSQL\\Metrics\\hz_metric.sql",
   "name": "metric",
   "localSqlPluginPath": "E:\\Projects\\flinkStreamSQL\\sqlplugins",
   "mode": "local"
