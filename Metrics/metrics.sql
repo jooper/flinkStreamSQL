@@ -293,14 +293,16 @@ concat_ws(':',cast(HOUR(EXEC_DATE) as string),'00') as DT,
 '门诊收入'as LABEL,
 cast(sum(total_cost) as string) as DATA,
 '10' as REMARK from
-(select DISCOUNT_AFTER_AMT as total_cost,EXEC_DATE from opr_registration_d
-union all
-select TOTAL_AMT as total_cost,EXEC_DATE from opc_diag_service_d_charge
-union all
-select TOTAL_AMT as total_cost, current_timestamp as EXEC_DATE from opc_drug_presc_d_charge
+(select  * from
+    (select DISCOUNT_AFTER_AMT as total_cost,EXEC_DATE from opr_registration_d
+    union all
+    select TOTAL_AMT as total_cost,EXEC_DATE from opc_diag_service_d_charge
+    union all
+    select TOTAL_AMT as total_cost, current_timestamp as EXEC_DATE from opc_drug_presc_d_charge
+    )
+    order by EXEC_DATE desc
 )
-group by cast(HOUR(EXEC_DATE) as string)
-;
+group by cast(HOUR(EXEC_DATE) as string);
 
 
 
