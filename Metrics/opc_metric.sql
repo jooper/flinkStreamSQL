@@ -13,7 +13,8 @@
     timezone='Asia/Shanghai',
     topicIsPattern ='false',
     updateMode='upsert',
-    parallelism ='1'
+    parallelism ='1',
+    log.cleanup.policy='compact'
 );
 
 -- CREATE TABLE metric_side_from_mysql(
