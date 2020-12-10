@@ -34,3 +34,9 @@ FlinkStreamSQL
 FlinkStreamSQL is under the Apache 2.0 license. See the [LICENSE](http://www.apache.org/licenses/LICENSE-2.0) file for details.    
                                
                           
+## 应用场景
+   1、大屏
+   2、实时数仓
+   3、实时机器学习
+   4、es知识库
+   5、实时预警
