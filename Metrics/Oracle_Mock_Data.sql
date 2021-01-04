@@ -4,9 +4,10 @@
 --门诊收入
 insert into opr_registration_d
 select * from opr_registration_d
-where DISCOUNT_AFTER_AMT>13 and to_char(EXEC_DATE,'yyyy-mm-dd')='2019-12-10' and rownum<80
+where DISCOUNT_AFTER_AMT>13 and to_char(EXEC_DATE,'yyyy-mm-dd')='2019-12-10' and rownum<90
 order by EXEC_DATE;
 commit;
+
 
 
 --手术例数
@@ -18,6 +19,14 @@ commit;
 --住院收入
 insert into ipc_drug_presc_d
 select * from ipc_drug_presc_d where rownum<25;
+commit;
+
+insert into ipc_diag_service_h
+select * from ipc_diag_service_h where rownum<25;
+commit;
+
+insert into ipc_drug_presc_h
+select * from ipc_drug_presc_h where rownum<25;
 commit;
 
 --住院收入
@@ -32,6 +41,11 @@ select * from ipi_registration where rownum<61;
 commit;
 
 
+
+
+
+
+
 --门诊人次   算了distinct，所以插入同一批数据的时候页面不会变动
 insert into opc_registration
 select * from opc_registration where rownum<89;
@@ -41,9 +55,10 @@ commit;
 --会诊人次
 insert into IPD_CONSULT_APPLY
 select * from ipd_consult_apply
-where rownum<25 and id is not null
+where rownum<60 and id is not null
 order by req_date;
 commit;
+
 
 -- 医生治疗患者数，男女分布，全国患者分布,转诊人次
 insert into mrm_first_page
@@ -79,19 +94,45 @@ select * from mrm_first_page where id in (
 'f6edafed30fa80812f54',
 '6ed1342a5a44808166de',
 '92b9732811cc808166de'
-) and rownum< 101;
+) and rownum< 121;
 commit;
 
 
 --检验
 insert into mtw_lab_h
-select * from mtw_lab_h where rownum<20;
+select * from mtw_lab_h where rownum<10;
 commit;
 
 --检查
 insert into mtw_exam_h
-select * from mtw_exam_h where rownum<20;
+select * from mtw_exam_h where rownum<40;
 commit;
 
 
+
+insert into opc_diag_service_h_charge
+select * from opc_diag_service_h_charge where rownum<40;
+commit;
+
+insert into opc_diag_service_d_charge
+select * from opc_diag_service_d_charge where rownum<40;
+commit;
+
+insert into opr_registration_d
+select * from opr_registration_d where rownum<40;
+commit;
+
+
+insert into opr_registration
+select * from opr_registration where rownum<40;
+commit;
+
+
+insert into opc_drug_presc_h_charge
+select * from opc_drug_presc_h_charge where rownum<40;
+commit;
+
+insert into opc_drug_presc_d_charge
+select * from opc_drug_presc_d_charge where rownum<40;
+commit;
 
